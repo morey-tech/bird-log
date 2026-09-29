@@ -1,0 +1,19 @@
+schemaVersion: 2.2.0
+metadata:
+  name: bird-log
+  description: Bird log development environment
+  language: python
+  projectType: Python
+
+components:
+  - name: dev-container
+    container:
+      image: ghcr.io/morey-tech/homelab/devspace-base:latest
+      memoryLimit: 4Gi
+      cpuLimit: 2000m
+      mountSources: true
+      sourceMapping: /workspaces/bird-log
+      endpoints:
+        - name: web
+          targetPort: 8080
+          exposure: public
