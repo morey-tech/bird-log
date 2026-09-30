@@ -73,7 +73,7 @@ jobs:
 
       - name: Set up Python for service tests
         if: hashFiles(format('services/{0}/tests/test_*.py', matrix.container)) != ''
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
 
