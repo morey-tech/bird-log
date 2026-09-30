@@ -3,6 +3,7 @@
 The `web` service implements issue #3 using FastAPI, Jinja, locally served CSS/JavaScript,
 and the analyzer's version 1 SQLite schema. It works without internet after installation.
 It does not run BirdNET or access raw audio, models, audio devices, or the container socket.
+See the shared [container build and publishing guide](containers.md) for CI behavior and published images.
 
 ## Start the three-service stack
 

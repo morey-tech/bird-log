@@ -2,7 +2,8 @@ name: Container Build
 
 on:
   push:
-    branches: ['**']
+    # Dependabot branches are validated by pull_request; avoid duplicate builds.
+    branches-ignore: ['dependabot/**']
     paths:
       - 'services/**'
       - '.github/scripts/**'
@@ -41,7 +42,7 @@ jobs:
       has_containers: ${{ steps.detect.outputs.has_containers }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Detect changed containers
@@ -69,11 +70,11 @@ jobs:
         container: ${{ fromJSON(needs.detect-changes.outputs.containers) }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Python for service tests
         if: hashFiles(format('services/{0}/tests/test_*.py', matrix.container)) != ''
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
 
