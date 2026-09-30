@@ -1,0 +1,11 @@
+FROM python:3.11-slim-bookworm
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PIP_NO_CACHE_DIR=1 \
+    OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+RUN apt-get update && apt-get install -y --no-install-recommends libsndfile1 libgomp1 tzdata \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY pyproject.toml requirements.lock ./
+COPY src ./src
+RUN pip install -c requirements.lock '.[ml]'
+ENTRYPOINT ["birdlog-analyzer"]
+CMD ["run"]

@@ -1,0 +1,6 @@
+# Explicit online model provisioning only; regular analyzer operation stays offline.
+services:
+  analyzer:
+    network_mode: bridge
+    volumes:
+      - ${MODELS_HOST_DIR:-./data/models}:/models:rw,z

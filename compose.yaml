@@ -32,3 +32,52 @@ services:
       timeout: 5s
       retries: 3
       start_period: 40s
+
+  analyzer:
+    build:
+      context: ./services/analyzer
+      dockerfile: Containerfile
+    restart: unless-stopped
+    network_mode: none
+    environment:
+      RECORDINGS_DIR: /data/recordings
+      CLIPS_DIR: /data/clips
+      DATABASE_PATH: /data/db/bird-log.sqlite3
+      MODEL_DIR: /models
+      STATUS_PATH: /status/analyzer/status.json
+      LATITUDE: ${LATITUDE:-}
+      LONGITUDE: ${LONGITUDE:-}
+      LOCATION_TIMEZONE: ${LOCATION_TIMEZONE:-America/Toronto}
+      WINDOW_HOP_SECONDS: ${WINDOW_HOP_SECONDS:-1.5}
+      MIN_SCORE: ${MIN_SCORE:-0.5}
+      GEO_MIN_SCORE: ${GEO_MIN_SCORE:-0.03}
+      ENCOUNTER_GAP_SECONDS: ${ENCOUNTER_GAP_SECONDS:-3}
+      MAX_ENCOUNTER_SECONDS: ${MAX_ENCOUNTER_SECONDS:-60}
+      CLIP_PADDING_SECONDS: ${CLIP_PADDING_SECONDS:-1}
+      CLIP_RETENTION_DAYS: ${CLIP_RETENTION_DAYS:-90}
+      MAX_CLIP_STORAGE_MB: ${MAX_CLIP_STORAGE_MB:-}
+      MIN_FREE_DISK_MB: ${ANALYZER_MIN_FREE_DISK_MB:-1024}
+      MAX_INPUT_SECONDS: ${MAX_INPUT_SECONDS:-120}
+      MAX_SPECIES_PER_WINDOW: ${MAX_SPECIES_PER_WINDOW:-5}
+      SCAN_SECONDS: ${SCAN_SECONDS:-5}
+      IDLE_FLUSH_SECONDS: ${IDLE_FLUSH_SECONDS:-90}
+      MAX_ATTEMPTS: ${MAX_ATTEMPTS:-3}
+      RETRY_SECONDS: ${RETRY_SECONDS:-10}
+      STALL_SECONDS: ${STALL_SECONDS:-300}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ${RECORDINGS_HOST_DIR:-./data/recordings}:/data/recordings:ro,z
+      - ${CLIPS_HOST_DIR:-./data/clips}:/data/clips:z
+      - ${DATABASE_HOST_DIR:-./data/db}:/data/db:z
+      - ${MODELS_HOST_DIR:-./data/models}:/models:ro,z
+      - ${ANALYZER_STATUS_HOST_DIR:-./data/status/analyzer}:/status/analyzer:z
+    tmpfs:
+      - /tmp:size=512m,mode=1777
+    shm_size: 256m
+    stop_grace_period: 60s
+    healthcheck:
+      test: ["CMD", "birdlog-analyzer", "health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
