@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools==78.1.1"]
+requires = ["setuptools==80.9.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -15,6 +15,9 @@ browser = ["playwright==1.63.0"]
 
 [project.scripts]
 birdlog-web = "birdlog_web.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools.package-data]
 birdlog_web = ["templates/*.html", "static/*", "schema.sql"]

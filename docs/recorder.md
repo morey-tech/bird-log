@@ -171,7 +171,7 @@ Local development (no microphone needed for automated tests):
 
 ```sh
 python3 -m venv .venv
-.venv/bin/pip install -e services/recorder pytest==8.3.5
+.venv/bin/pip install -c services/recorder/requirements.lock -e 'services/recorder[test]'
 .venv/bin/pytest services/recorder/tests -q
 ```
 

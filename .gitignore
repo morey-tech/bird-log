@@ -224,3 +224,5 @@ __marimo__/
 /.venv-analyzer/
 
 .venv-web/
+
+/.venv-recorder/

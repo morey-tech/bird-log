@@ -9,6 +9,9 @@ description = "Continuous USB audio capture for Bird Log"
 requires-python = ">=3.11"
 dependencies = ["sounddevice==0.5.1", "soundfile==0.13.1", "numpy==2.2.6", "cffi==1.17.1", "pycparser==2.22"]
 
+[project.optional-dependencies]
+test = ["pytest==8.3.5"]
+
 [project.scripts]
 birdlog-recorder = "birdlog_recorder.__main__:main"
 

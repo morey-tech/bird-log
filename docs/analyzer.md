@@ -129,7 +129,7 @@ Run deterministic tests without downloading models:
 
 ```sh
 python3 -m venv .venv-analyzer
-.venv-analyzer/bin/pip install -e services/analyzer pytest==8.3.5
+.venv-analyzer/bin/pip install -c services/analyzer/requirements.lock -e 'services/analyzer[test]'
 .venv-analyzer/bin/pytest services/analyzer/tests -q
 ```
 

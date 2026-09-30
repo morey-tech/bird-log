@@ -18,6 +18,24 @@ Start with the [recorder setup guide](docs/recorder.md), then [configure the ana
 
 The sections below describe the overall project design and first milestone.
 
+## Development dependencies
+
+Each service declares its own pinned dependencies and a `test` extra in `pyproject.toml`.
+Its `requirements.lock` constrains runtime dependencies in both container builds and test
+installs. Use a separate virtual environment for each service; their runtime versions can differ.
+From the repository root, the same installation command works for any service:
+
+```sh
+SERVICE=web # recorder, analyzer, or web
+python3 -m venv ".venv-$SERVICE"
+".venv-$SERVICE/bin/python" -m pip install -c "services/$SERVICE/requirements.lock" -e "services/${SERVICE}[test]"
+".venv-$SERVICE/bin/python" -m pytest "services/$SERVICE/tests" -q
+```
+
+The analyzer's `ml` extra adds model inference dependencies; the web service's `browser`
+extra adds browser smoke-test tooling. Runtime constraint files do not install optional
+extras by themselves. See each service guide for those workflows.
+
 ## Planned hardware and runtime
 
 | Component | Starting choice |

@@ -82,11 +82,7 @@ jobs:
         env:
           SERVICE: ${{ matrix.container }}
         run: |
-          if [ "$SERVICE" = "web" ]; then
-            python -m pip install -c services/web/requirements.lock -e "services/web[test]"
-          else
-            python -m pip install -e "services/$SERVICE" pytest==8.3.5
-          fi
+          python -m pip install -c "services/$SERVICE/requirements.lock" -e "services/${SERVICE}[test]"
           python -m pytest "services/$SERVICE/tests" -q
 
       - name: Set image name
