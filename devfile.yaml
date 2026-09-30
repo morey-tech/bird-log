@@ -13,7 +13,16 @@ components:
       cpuLimit: 2000m
       mountSources: true
       sourceMapping: /workspaces/bird-log
+      volumeMounts:
+        - name: codex-state
+          path: /home/user/.codex
       endpoints:
         - name: web
           targetPort: 8080
           exposure: public
+
+  # Keep Codex sessions, settings, and authentication across workspace restarts.
+  - name: codex-state
+    volume:
+      size: 1Gi
+      ephemeral: false
