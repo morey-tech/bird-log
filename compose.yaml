@@ -81,3 +81,40 @@ services:
       timeout: 5s
       retries: 3
       start_period: 120s
+
+  web:
+    build:
+      context: ./services/web
+      dockerfile: Containerfile
+    restart: unless-stopped
+    environment:
+      WEB_HOST: 0.0.0.0
+      WEB_PORT: 8080
+      WEB_ALLOWED_HOSTS: ${WEB_ALLOWED_HOSTS:-localhost,127.0.0.1,[::1]}
+      DATABASE_PATH: /data/db/bird-log.sqlite3
+      CLIPS_DIR: /data/clips
+      RECORDER_STATUS_PATH: /status/recorder/status.json
+      ANALYZER_STATUS_PATH: /status/analyzer/status.json
+      DISPLAY_TIMEZONE: ${DISPLAY_TIMEZONE:-America/Toronto}
+      PAGE_SIZE: ${PAGE_SIZE:-50}
+      REFRESH_SECONDS: ${REFRESH_SECONDS:-30}
+      SPECTROGRAM_CACHE_DIR: /data/web-cache/spectrograms
+      SPECTROGRAM_CACHE_MAX_MB: ${SPECTROGRAM_CACHE_MAX_MB:-256}
+      SPECTROGRAM_CACHE_TTL_SECONDS: ${SPECTROGRAM_CACHE_TTL_SECONDS:-3600}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "${WEB_PUBLISH_ADDRESS:-127.0.0.1}:${WEB_PUBLISH_PORT:-8080}:8080"
+    volumes:
+      - ${DATABASE_HOST_DIR:-./data/db}:/data/db:z
+      - ${CLIPS_HOST_DIR:-./data/clips}:/data/clips:ro,z
+      - ${RECORDER_STATUS_HOST_DIR:-./data/status/recorder}:/status/recorder:ro,z
+      - ${ANALYZER_STATUS_HOST_DIR:-./data/status/analyzer}:/status/analyzer:ro,z
+      - ${WEB_CACHE_HOST_DIR:-./data/web-cache}:/data/web-cache:Z
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    healthcheck:
+      test: ["CMD", "birdlog-web", "health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
