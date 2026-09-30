@@ -1,5 +1,5 @@
 # Tested Python 3.11 runtime constraints; install with pip -c constraints.txt .[ml]
-ai-edge-litert==2.0.3
+ai-edge-litert==2.2.0
 backports.strenum==1.2.8
 birdnet==1.1.1
 certifi==2026.7.22
@@ -7,7 +7,7 @@ cffi==2.1.1
 charset-normalizer==3.5.1
 flatbuffers==25.12.19
 idna==3.20
-numpy==2.2.6
+numpy==2.4.6
 onnxruntime==1.30.0
 ordered-set==4.1.0
 packaging==26.3
@@ -20,7 +20,7 @@ python-dateutil==2.9.0.post0
 requests==2.34.2
 scipy==1.17.1
 six==1.17.0
-soundfile==0.13.1
+soundfile==0.14.0
 tqdm==4.70.1
 typing_extensions==4.16.0
 urllib3==2.8.0
