@@ -10,7 +10,7 @@ requires-python = ">=3.11"
 dependencies = ["numpy==2.2.6", "soundfile==0.13.1"]
 
 [project.optional-dependencies]
-test = ["pytest==8.3.5"]
+test = ["pytest==9.1.1"]
 ml = ["birdnet==1.1.1", "ai-edge-litert==2.0.3"]
 
 [project.scripts]
