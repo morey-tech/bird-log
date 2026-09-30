@@ -35,7 +35,7 @@ env:
 
 jobs:
   detect-changes:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       containers: ${{ steps.detect.outputs.containers }}
       has_containers: ${{ steps.detect.outputs.has_containers }}
@@ -59,7 +59,7 @@ jobs:
   build-and-push:
     needs: detect-changes
     if: needs.detect-changes.outputs.has_containers == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
