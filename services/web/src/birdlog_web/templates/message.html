@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<section class="card"><p role="alert">{{ message }}</p><a href="{{ retry|default(request.url.path ~ ('?' ~ request.url.query if request.url.query else '')) }}">Reload page</a> · <a href="/status">View system status</a></section>{% endblock %}

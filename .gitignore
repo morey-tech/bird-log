@@ -222,3 +222,5 @@ __marimo__/
 
 # Isolated analyzer development environment
 /.venv-analyzer/
+
+.venv-web/

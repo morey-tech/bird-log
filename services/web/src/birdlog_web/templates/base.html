@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }} · Bird Log</title><link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script></head>
+<body data-refresh="{{ refresh }}"><a class="skip" href="#main">Skip to content</a>
+<header><a class="brand" href="/">◒ Bird Log <span>FIELD NOTES</span></a><nav aria-label="Main navigation">
+<a href="/" {% if request.url.path == '/' %}aria-current="page"{% endif %}>Overview</a>
+<a href="/encounters" {% if request.url.path.startswith('/encounters') %}aria-current="page"{% endif %}>Encounters</a>
+<a href="/species" {% if request.url.path == '/species' %}aria-current="page"{% endif %}>Species history</a>
+<a href="/status" {% if request.url.path == '/status' %}aria-current="page"{% endif %}>System</a></nav></header>
+<main id="main"><p class="eyebrow">A listening record of your surroundings</p><h1>{{ title }}</h1>
+{% block content %}{% endblock %}</main>
+<footer>Bird Log · Times in {{ timezone }} · Model scores rank detections; they are not probabilities.</footer>
+</body></html>

@@ -1,0 +1,9 @@
+<form class="filters" method="get" aria-label="Filter encounters">
+<label>From<input type="date" name="since" value="{{ filters.since }}" required></label>
+<label>Through<input type="date" name="until" value="{{ filters.until }}" required></label>
+<label>Species<input name="species" value="{{ filters.species }}" placeholder="All species" list="species-options" maxlength="250"></label>
+<datalist id="species-options">{% for s in species %}<option value="{{ s.species }}">{{ s.common_name }}</option>{% endfor %}</datalist>
+<label>Review<select name="review" aria-label="Review"><option value="">All review states</option>{% for review in reviews %}<option value="{{ review }}" {% if filters.review == review %}selected{% endif %}>{{ review|capitalize }}</option>{% endfor %}</select></label>
+<label>Minimum score<input type="number" name="score" min="0" max="1" step="0.01" value="{{ filters.score }}"></label><button type="submit">Apply filters</button>
+</form>
+<p class="muted">{{ filters.since }} through {{ filters.until }} (inclusive). {% if not filters.review %}Includes unreviewed and incorrect encounters.{% else %}Showing {{ filters.review }} encounters only.{% endif %} Each encounter is counted once, by its start time.</p>

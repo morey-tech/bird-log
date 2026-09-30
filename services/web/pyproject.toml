@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools==78.1.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "birdlog-web"
+version = "0.1.0"
+description = "Offline Bird Log dashboard and encounter review"
+requires-python = ">=3.11"
+dependencies = ["fastapi==0.142.1", "starlette==1.7.0", "uvicorn==0.54.0", "jinja2==3.1.6", "numpy==2.4.6", "matplotlib==3.11.2"]
+
+[project.optional-dependencies]
+test = ["pytest==8.3.5", "httpx==0.28.1"]
+browser = ["playwright==1.63.0"]
+
+[project.scripts]
+birdlog-web = "birdlog_web.__main__:main"
+
+[tool.setuptools.package-data]
+birdlog_web = ["templates/*.html", "static/*", "schema.sql"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

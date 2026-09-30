@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% block content %}
+{% include 'filters.html' %}
+{% if live %}<p id="refresh-status" class="muted" role="status">Activity refreshes every {{ refresh }} seconds.</p>{% endif %}
+<div {% if live %}data-live="overview"{% endif %}>
+<section class="summary" aria-label="Activity totals"><div><span class="big">{{ total }}</span><span>encounters in this period</span></div><div><span class="big">{{ species_count }}</span><span>species in this period</span></div><div><span class="small-title">Listen. Observe. Review.</span><span>Recordings are evidence, not a census.</span></div></section>
+{% if overview %}<div class="status-strip">{% for s in statuses %}<a href="/status">{{ s.service|capitalize }}: <strong class="health-{{ s.health }}">{{ s.health }}</strong> · {{ s.state }}</a>{% endfor %}</div>{% endif %}
+<section class="card"><h2>{{ 'Daily' if daily else 'Hourly' }} activity <span>encounters</span></h2>
+{% if total %}<div class="chart" role="group" aria-label="Encounter counts by {{ 'day' if daily else 'hour' }}">
+{% for label, count in chart %}<div class="bar-row"><span>{{ label }}</span><meter min="0" max="{{ peak }}" value="{{ count }}" aria-label="{{ label }}: {{ count }} encounters">{{ count }}</meter><strong>{{ count }}</strong></div>{% endfor %}</div>
+{% else %}<p class="empty">No encounters in this period. Adjust the filters or wait for new recordings.</p>{% endif %}</section>
+{% if overview or history %}<section class="card"><h2>Species in this period</h2>{% if species_count > 1000 %}<p>Showing the 1,000 most active species. Use an exact species filter to find others.</p>{% endif %}<div class="table-scroll"><table><thead><tr><th>Species</th><th>Encounters</th><th>First encounter</th><th>Last encounter</th></tr></thead><tbody>
+{% for s in species %}<tr><td><a href="/species?{{ dict(params, species=s.species)|query }}">{{ s.common_name }}</a><small><i>{{ s.scientific_name }}</i></small></td><td>{{ s.count }}</td><td>{{ s.first|localtime }}</td><td>{{ s.last|localtime }}</td></tr>{% else %}<tr><td colspan="4">No species match these filters.</td></tr>{% endfor %}</tbody></table></div></section>{% endif %}
+<section class="card"><h2>Recent encounters <span>newest first</span></h2><div class="table-scroll"><table><thead><tr><th>Recorded</th><th>Species</th><th>Peak score</th><th>Review</th><th>Clip state</th></tr></thead><tbody>
+{% for row in rows %}<tr><td><a href="/encounters/{{ row.id }}?{{ dict(params, page=page)|query }}">{{ row.start|localtime }}</a></td><td>{{ row.common_name }}<small><i>{{ row.scientific_name }}</i></small></td><td>{{ '%.3f'|format(row.score) }}</td><td><span class="badge">{{ row.review_status }}</span></td><td>{{ row.clip_state }}</td></tr>{% else %}<tr><td colspan="5">No encounters found.</td></tr>{% endfor %}</tbody></table></div>
+<nav class="pagination" aria-label="Results pages">{% if page > 1 %}<a href="?{{ dict(params, page=page-1)|query }}">← Previous</a>{% endif %}<span>Page {{ page }} · {{ total }} encounters</span>{% if page * page_size < total and page < 10000 %}<a href="?{{ dict(params, page=page+1)|query }}">Next →</a>{% endif %}</nav></section>
+</div>{% endblock %}

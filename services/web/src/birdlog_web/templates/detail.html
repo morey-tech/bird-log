@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block content %}
+<a href="/encounters?{{ params|query }}">← Back to filtered encounters</a><p><i>{{ row.scientific_name }}</i> · <a href="/species?{{ dict(params, species=row.species, page=1)|query }}">Species history</a></p>
+{% if saved %}<p class="notice" role="status">Review saved.</p>{% endif %}
+<div class="detail-grid"><section class="card"><h2>Encounter evidence</h2><dl><dt>Start</dt><dd>{{ row.start|localtime }}</dd><dt>End</dt><dd>{{ row.end|localtime }}</dd><dt>Peak model score</dt><dd>{{ '%.3f'|format(row.score) }} — highest underlying detection score; not a probability.</dd><dt>Model version</dt><dd class="wrap">{{ row.model_version }}</dd><dt>Encounter state</dt><dd>{{ row.state }}</dd><dt>Clip state</dt><dd>{{ row.clip_state }}</dd></dl></section>
+<section class="card"><h2>Review this encounter</h2><p>Judge the species prediction using the recording. Model evidence stays unchanged.</p><form method="post" action="/encounters/{{ row.id }}/review?{{ params|query }}">
+<input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="version" value="{{ row.review_version }}">
+<label>Review status<select name="status" aria-label="Review status">{% for review in reviews %}<option value="{{ review }}" {% if row.review_status == review %}selected{% endif %}>{{ review|capitalize }}</option>{% endfor %}</select></label><button type="submit">Save review</button></form><p class="muted">Last reviewed: {{ row.review_updated_at|localtime }}</p></section></div>
+<section class="card"><h2>Listen to the recording</h2>{% if available %}
+<audio controls preload="none" src="/encounters/{{ row.id }}/audio">Your browser does not support audio playback.</audio><p class="media-error" role="status" hidden>Audio is unavailable. It may have expired since this page loaded.</p>
+<p class="muted">Spectrogram time starts at {{ row.clip_start|localtime }}, including any clip padding.</p>
+<img class="spectrogram" src="/encounters/{{ row.id }}/spectrogram" loading="lazy" alt="Spectrogram of this encounter, with time in seconds and frequency in Hz"><p class="spectrogram-state" role="status">Loading spectrogram…</p><button type="button" class="retry-image" hidden>Retry spectrogram</button>
+{% else %}<p class="empty">Audio unavailable: the clip is pending, missing, or expired. Metadata and reviews remain available.</p>{% endif %}</section>
+<section class="card"><h2>Underlying detections</h2><div class="table-scroll"><table><thead><tr><th>Start</th><th>End</th><th>Model score</th></tr></thead><tbody>{% for d in detections[:1000] %}<tr><td>{{ d.start|localtime }}</td><td>{{ d.end|localtime }}</td><td>{{ '%.3f'|format(d.score) }}</td></tr>{% else %}<tr><td colspan="3">No detection evidence is available.</td></tr>{% endfor %}</tbody></table></div>{% if detections|length > 1000 %}<p>Showing the first 1,000 detections.</p>{% endif %}</section>
+{% endblock %}
