@@ -1,6 +1,6 @@
 # Python 3.11 runtime constraints; direct requirements are pinned in pyproject.toml.
 cffi==1.17.1
-numpy==2.2.6
+numpy==2.4.6
 pycparser==2.22
-sounddevice==0.5.1
-soundfile==0.13.1
+sounddevice==0.5.6
+soundfile==0.14.0
