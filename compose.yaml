@@ -1,0 +1,34 @@
+services:
+  recorder:
+    build:
+      context: ./services/recorder
+      dockerfile: Containerfile
+    restart: unless-stopped
+    environment:
+      AUDIO_DEVICE_MATCH: ${AUDIO_DEVICE_MATCH:-Yeti}
+      AUDIO_SAMPLE_RATE: ${AUDIO_SAMPLE_RATE:-48000}
+      AUDIO_CHANNEL_MODE: ${AUDIO_CHANNEL_MODE:-mono}
+      CHUNK_SECONDS: ${CHUNK_SECONDS:-30}
+      RETENTION_HOURS: ${RETENTION_HOURS:-24}
+      MIN_FREE_DISK_MB: ${MIN_FREE_DISK_MB:-1024}
+      MAX_RECORDINGS_MB: ${MAX_RECORDINGS_MB:-10000}
+      QUEUE_SECONDS: ${QUEUE_SECONDS:-5}
+      CALLBACK_TIMEOUT_SECONDS: ${CALLBACK_TIMEOUT_SECONDS:-5}
+      RETRY_MAX_SECONDS: ${RETRY_MAX_SECONDS:-60}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      RECORDINGS_DIR: /data/recordings
+      STATUS_PATH: /status/recorder/status.json
+    volumes:
+      - ${RECORDINGS_HOST_DIR:-./data/recordings}:/data/recordings:z
+      - ${RECORDER_STATUS_HOST_DIR:-./data/status/recorder}:/status/recorder:z
+      # Directory bind keeps replacement USB device nodes visible (rootless).
+      - /dev/snd:/dev/snd:rw
+    group_add:
+      - keep-groups
+    stop_grace_period: 30s
+    healthcheck:
+      test: ["CMD", "birdlog-recorder", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
