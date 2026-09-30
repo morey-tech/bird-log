@@ -21,14 +21,14 @@ The sections below describe the overall project design and first milestone.
 ## Development dependencies
 
 Each service declares its own pinned dependencies and a `test` extra in `pyproject.toml`.
-Its `requirements.lock` constrains runtime dependencies in both container builds and test
+Its `constraints.txt` constrains runtime dependencies in both container builds and test
 installs. Use a separate virtual environment for each service; their runtime versions can differ.
 From the repository root, the same installation command works for any service:
 
 ```sh
 SERVICE=web # recorder, analyzer, or web
 python3 -m venv ".venv-$SERVICE"
-".venv-$SERVICE/bin/python" -m pip install -c "services/$SERVICE/requirements.lock" -e "services/${SERVICE}[test]"
+".venv-$SERVICE/bin/python" -m pip install -c "services/$SERVICE/constraints.txt" -e "services/${SERVICE}[test]"
 ".venv-$SERVICE/bin/python" -m pytest "services/$SERVICE/tests" -q
 ```
 
@@ -44,9 +44,13 @@ Minor and patch updates are grouped per service/ecosystem; major updates get sep
 pull requests. Update PRs use conventional commit prefixes and run the existing CI checks.
 They require review; automatic merging is not configured.
 
-Each service's `requirements.txt` points to its `requirements.lock` constraints and local
+Each service's `requirements.txt` points to its `constraints.txt` constraints and local
 Python package so Dependabot can discover both the constraints and `pyproject.toml`.
-Dependency versions remain in those existing files; the entrypoint duplicates no pins.
+The `.txt` extension is required because Dependabot's Python parser only stages `.txt`
+and `.in` requirement/constraint files. Dependency versions remain in those existing files;
+the entrypoint duplicates no pins. Python base-image updates stay within 3.11: moving to
+another Python minor version requires updating runtime constraints and CI together, with
+ARM64 validation.
 Keep these files together when adding a service, and add its Python and container update
 locations to the Dependabot configuration. Updates begin once this configuration reaches
 GitHub's default branch.

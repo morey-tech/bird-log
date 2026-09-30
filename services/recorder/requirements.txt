@@ -1,4 +1,4 @@
 # Expose runtime constraints to Dependabot without duplicating package pins.
 # For a base development install, run pip install -r requirements.txt from this directory.
--c requirements.lock
+-c constraints.txt
 -e .

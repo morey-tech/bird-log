@@ -157,7 +157,7 @@ review updates, and spectrogram errors; browser errors omit filesystem paths.
 
 ```sh
 python3 -m venv .venv-web
-.venv-web/bin/pip install -c services/web/requirements.lock -e 'services/web[test,browser]'
+.venv-web/bin/pip install -c services/web/constraints.txt -e 'services/web[test,browser]'
 .venv-web/bin/birdlog-web seed --directory /tmp/birdlog-demo
 DATABASE_PATH=/tmp/birdlog-demo/db/bird-log.sqlite3 \
 CLIPS_DIR=/tmp/birdlog-demo/clips \

@@ -20,7 +20,7 @@ podman compose logs -f analyzer
 
 Regular analyzer operation uses `network_mode: none`, mounts models and raw recordings read-only, and has no sound-device access. It uses `birdnet.load_custom` with local files rather than the automatic downloader. Missing, incompatible, or modified model files fail startup clearly. Model files are not bundled in the image or repository.
 
-The initial implementation pins `birdnet==1.1.1` and `ai-edge-litert==2.0.3`. All tested runtime dependencies are constrained in `services/analyzer/requirements.lock`. The Python package's `ml` extra enables inference; base dependencies suffice for deterministic pipeline tests. The container installs the extra and constraints. Model APIs were checked against the [official BirdNET library](https://github.com/birdnet-team/birdnet); its source code is MIT licensed and model files are [CC BY-NC-SA 4.0](https://github.com/birdnet-team/birdnet/blob/main/LICENSE.md).
+The initial implementation pins `birdnet==1.1.1` and `ai-edge-litert==2.0.3`. All tested runtime dependencies are constrained in `services/analyzer/constraints.txt`. The Python package's `ml` extra enables inference; base dependencies suffice for deterministic pipeline tests. The container installs the extra and constraints. Model APIs were checked against the [official BirdNET library](https://github.com/birdnet-team/birdnet); its source code is MIT licensed and model files are [CC BY-NC-SA 4.0](https://github.com/birdnet-team/birdnet/blob/main/LICENSE.md).
 
 The root systemd stack unit starts this service alongside the recorder after models and images are provisioned. Retain the recorder guide's SSD mount checks. The existing container-build workflow discovers the analyzer Containerfile automatically and publishes its image at `ghcr.io/morey-tech/bird-log/analyzer`.
 
@@ -129,11 +129,11 @@ Run deterministic tests without downloading models:
 
 ```sh
 python3 -m venv .venv-analyzer
-.venv-analyzer/bin/pip install -c services/analyzer/requirements.lock -e 'services/analyzer[test]'
+.venv-analyzer/bin/pip install -c services/analyzer/constraints.txt -e 'services/analyzer[test]'
 .venv-analyzer/bin/pytest services/analyzer/tests -q
 ```
 
-For direct model testing, install `services/analyzer[ml]` using `-c services/analyzer/requirements.lock`, provision a local model directory, and set deployment variables. Use a finalized recorder WAV for the repeatable benchmark:
+For direct model testing, install `services/analyzer[ml]` using `-c services/analyzer/constraints.txt`, provision a local model directory, and set deployment variables. Use a finalized recorder WAV for the repeatable benchmark:
 
 ```sh
 podman compose run --rm analyzer benchmark /data/recordings/YYYY/MM/DD/RECORDING.wav
