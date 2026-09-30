@@ -219,3 +219,6 @@ __marimo__/
 
 # Local recordings and service status
 /data/
+
+# Isolated analyzer development environment
+/.venv-analyzer/

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "birdlog-analyzer"
+version = "0.1.0"
+description = "Offline BirdNET analysis and encounter storage for Bird Log"
+requires-python = ">=3.11"
+dependencies = ["numpy==2.2.6", "soundfile==0.13.1"]
+
+[project.optional-dependencies]
+ml = ["birdnet==1.1.1", "ai-edge-litert==2.0.3"]
+
+[project.scripts]
+birdlog-analyzer = "birdlog_analyzer.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

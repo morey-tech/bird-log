@@ -1,0 +1,26 @@
+# Tested Python 3.11 runtime constraints; install with pip -c requirements.lock .[ml]
+ai-edge-litert==2.0.3
+backports.strenum==1.2.8
+birdnet==1.1.1
+certifi==2026.7.22
+cffi==2.1.1
+charset-normalizer==3.5.1
+flatbuffers==25.12.19
+idna==3.20
+numpy==2.2.6
+onnxruntime==1.30.0
+ordered-set==4.1.0
+packaging==26.3
+pandas==3.0.6
+protobuf==7.36.2
+psutil==7.2.2
+pyarrow==25.0.1
+pycparser==3.0
+python-dateutil==2.9.0.post0
+requests==2.34.2
+scipy==1.17.1
+six==1.17.0
+soundfile==0.13.1
+tqdm==4.70.1
+typing_extensions==4.16.0
+urllib3==2.8.0
