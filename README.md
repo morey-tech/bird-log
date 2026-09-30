@@ -1,12 +1,20 @@
 # Bird Log
 
-A planned, continuously running bird monitor for Raspberry Pi. Bird Log will identify bird species locally with BirdNET, save recordings of detections, and display activity over time in a web dashboard.
+A bird monitor for Raspberry Pi, currently implementing continuous audio capture. Bird Log will identify bird species locally with BirdNET, save recordings of detections, and display activity over time in a web dashboard.
 
 The first goal is a useful species log with playable evidence. Recognizing individual birds is a separate, experimental extension.
 
 ## Project status
 
-This project is in the design stage. The repository currently contains development environment configuration and a license; recording, analysis, storage, the dashboard, and container deployment are not yet implemented. The sections below describe the intended architecture and first milestone.
+The recorder implementation, container definition, shared Podman Compose stack, automated tests, and systemd startup example are available. Raspberry Pi/Blue Yeti validation, the container build on ARM64, and the 24-hour hardware run are still pending. The analyzer and web dashboard remain planned.
+
+Start with the [recorder setup and operations guide](docs/recorder.md). Service implementations live under `services/`; `compose.yaml`, `deploy/`, and `docs/` support the complete stack in this repository.
+
+- [`services/recorder/`](services/recorder/) — Python package, Containerfile, and tests.
+- [`compose.yaml`](compose.yaml) and [`.env.example`](.env.example) — shared deployment configuration.
+- [`deploy/systemd/`](deploy/systemd/) — host startup integration.
+
+The sections below describe the overall project design and first milestone.
 
 ## Planned hardware and runtime
 
@@ -97,9 +105,9 @@ A hard disk-space limit will take precedence over the normal audio retention win
 
 ## Deployment considerations
 
-The planned deployment uses Podman Compose with a systemd service to start the stack after reboot. Compose files, container images, and service definitions still need to be created; there are no application installation or startup commands yet.
+The planned deployment uses Podman Compose with a systemd service to start the stack after reboot. The recorder Compose service, Containerfile, and systemd example are included; see the [recorder guide](docs/recorder.md) for build and startup commands. The analyzer and web services will join the same stack.
 
-The recorder will need access to the required `/dev/snd` devices. For rootless Podman, supplementary audio-group access may require `keep-groups` with the `crun` runtime. Device mappings and permissions must be tested on the target host; see the [Podman run documentation](https://docs.podman.io/en/latest/markdown/podman-run.1.html).
+The recorder mounts `/dev/snd` for access to the audio devices, including replacement nodes after USB reconnect. For rootless Podman, supplementary audio-group access may require `keep-groups` with the `crun` runtime. Device mappings and permissions must be tested on the target host; see the [Podman run documentation](https://docs.podman.io/en/latest/markdown/podman-run.1.html).
 
 [BirdNET-Pi](https://github.com/orbuskila/BirdNET-Pi) is a related reference for continuous bird identification on Raspberry Pi. Bird Log's chosen model, runtime, and container image will still need their own performance validation.
 
