@@ -18,7 +18,7 @@ docs/                        Setup and service contracts
 data/                        Ignored local runtime data (use an SSD on the Pi)
 ```
 
-The analyzer and web implementations will go in `services/analyzer/` and `services/web/` with their own dependencies, tests, and Containerfiles. Add their services to the same root Compose file. Shared deployment assets stay in `deploy/`; introduce shared Python packages only when there is actual shared code.
+The analyzer lives in `services/analyzer/` (see the [analyzer guide](analyzer.md)); the web implementation will go in `services/web/`. Each service has its own dependencies, tests, and Containerfile. Add their services to the same root Compose file. Shared deployment assets stay in `deploy/`; introduce shared Python packages only when there is actual shared code.
 
 ## Prepare the Pi
 
@@ -193,7 +193,7 @@ API references: [sounddevice stream API](https://python-sounddevice.readthedocs.
 
 ## Image builds and publishing
 
-[The container workflow](../.github/workflows/container-build.yml) tests and builds services with a `services/<name>/Containerfile`. The recorder publishes to `ghcr.io/morey-tech/bird-log/recorder` for `linux/amd64` and `linux/arm64`. The analyzer and web images will be discovered automatically when their Containerfiles are added. Service Python tests are run before building when `tests/test_*.py` files exist; add service-specific test steps if a future service uses another test layout or language.
+[The container workflow](../.github/workflows/container-build.yml) tests and builds services with a `services/<name>/Containerfile`. The recorder publishes to `ghcr.io/morey-tech/bird-log/recorder` for `linux/amd64` and `linux/arm64`. The analyzer image is also discovered automatically; the web image will join when its Containerfile is added. Service Python tests are run before building when `tests/test_*.py` files exist; add service-specific test steps if a future service uses another test layout or language.
 
 Pushes build services changed across the complete pushed commit range. Pull requests build affected services without registry login or image publishing. Workflow/detection-script changes rebuild every service; removed services are skipped. Builds use per-service GitHub Actions and registry caches, with the default branch updating the registry `buildcache` tag.
 
