@@ -36,6 +36,21 @@ The analyzer's `ml` extra adds model inference dependencies; the web service's `
 extra adds browser smoke-test tooling. Runtime constraint files do not install optional
 extras by themselves. See each service guide for those workflows.
 
+## Dependency updates
+
+[Dependabot](.github/dependabot.yml) checks Python dependencies for each service,
+container base images, and GitHub Actions weekly on Monday at 06:00 America/Toronto.
+Minor and patch updates are grouped per service/ecosystem; major updates get separate
+pull requests. Update PRs use conventional commit prefixes and run the existing CI checks.
+They require review; automatic merging is not configured.
+
+Each service's `requirements.txt` points to its `requirements.lock` constraints and local
+Python package so Dependabot can discover both the constraints and `pyproject.toml`.
+Dependency versions remain in those existing files; the entrypoint duplicates no pins.
+Keep these files together when adding a service, and add its Python and container update
+locations to the Dependabot configuration. Updates begin once this configuration reaches
+GitHub's default branch.
+
 ## Planned hardware and runtime
 
 | Component | Starting choice |

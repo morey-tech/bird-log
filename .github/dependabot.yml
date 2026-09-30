@@ -1,0 +1,80 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Toronto
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci
+    groups:
+      github-actions:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: docker
+    directories:
+      - /services/recorder
+      - /services/analyzer
+      - /services/web
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Toronto
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build
+    groups:
+      container-images:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  # Keep Python update jobs separate: services intentionally use different pins.
+  - package-ecosystem: pip
+    directory: /services/recorder
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Toronto
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build
+    groups:
+      recorder-python:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: pip
+    directory: /services/analyzer
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Toronto
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build
+    groups:
+      analyzer-python:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: pip
+    directory: /services/web
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Toronto
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build
+    groups:
+      web-python:
+        patterns: ["*"]
+        update-types: [minor, patch]
