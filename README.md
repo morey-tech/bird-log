@@ -42,7 +42,9 @@ extras by themselves. See each service guide for those workflows.
 container base images, and GitHub Actions weekly on Monday at 06:00 America/Toronto.
 Minor and patch updates are grouped per service/ecosystem; major updates get separate
 pull requests. Update PRs use conventional commit prefixes and run the existing CI checks.
-They require review; automatic merging is not configured.
+They require review; automatic merging is not configured. See the shared
+[container build and publishing guide](docs/containers.md) for CI triggers, duplicate-build
+prevention, image tags, and manual builds.
 
 Each service's `requirements.txt` points to its `constraints.txt` constraints and local
 Python package so Dependabot can discover both the constraints and `pyproject.toml`.

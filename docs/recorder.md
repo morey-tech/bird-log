@@ -193,14 +193,4 @@ API references: [sounddevice stream API](https://python-sounddevice.readthedocs.
 
 ## Image builds and publishing
 
-[The container workflow](../.github/workflows/container-build.yml) tests and builds services with a `services/<name>/Containerfile`. The recorder publishes to `ghcr.io/morey-tech/bird-log/recorder` for `linux/amd64` and `linux/arm64`. The analyzer image is also discovered automatically; the web image will join when its Containerfile is added. Service Python tests are run before building when `tests/test_*.py` files exist; add service-specific test steps if a future service uses another test layout or language.
-
-Pushes build services changed across the complete pushed commit range. Pull requests build affected services without registry login or image publishing. Workflow/detection-script changes rebuild every service; removed services are skipped. Builds use per-service GitHub Actions and registry caches, with the default branch updating the registry `buildcache` tag.
-
-Published images receive `sha-<short-commit>` tags. The default branch also updates `latest`. In Actions → Container Build → Run workflow, choose an optional service and custom tag; leaving the service empty builds all images. Invalid service names/tags fail explicitly. `buildcache` is reserved, and `latest` is restricted to the default branch. Publishing uses the repository's `GITHUB_TOKEN` with `packages: write`; no additional registry secret is required. Package visibility and repository access can be managed in GHCR after the first publication.
-
-The local Compose stack still builds from source. To inspect a published multi-platform image after a successful workflow run:
-
-```sh
-docker buildx imagetools inspect ghcr.io/morey-tech/bird-log/recorder:latest
-```
+See the shared [container build and publishing guide](containers.md) for CI triggers, image tags, registry access, and manual builds.
