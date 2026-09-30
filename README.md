@@ -1,17 +1,18 @@
 # Bird Log
 
-A bird monitor for Raspberry Pi, with continuous audio capture and local species analysis. Bird Log will identify bird species locally with BirdNET, save recordings of detections, and display activity over time in a web dashboard.
+A bird monitor for Raspberry Pi, with continuous audio capture and local species analysis. Bird Log identifies bird species locally with BirdNET, saves recordings of detections, and displays activity over time in a web dashboard.
 
 The first goal is a useful species log with playable evidence. Recognizing individual birds is a separate, experimental extension.
 
 ## Project status
 
-The recorder and analyzer implementations, container definitions, shared Podman Compose stack, automated tests, and systemd startup example are available. Raspberry Pi/Blue Yeti validation, container builds on ARM64, and the 24-hour integrated hardware run are still pending. The web dashboard remains planned.
+The recorder, analyzer, and web dashboard implementations, container definitions, shared Podman Compose stack, automated tests, and systemd startup example are available. Raspberry Pi/Blue Yeti validation, container builds on ARM64, and the 24-hour integrated hardware run are still pending.
 
-Start with the [recorder setup guide](docs/recorder.md), then [configure the analyzer and provision its models](docs/analyzer.md). Service implementations live under `services/`; `compose.yaml`, `deploy/`, and `docs/` support the complete stack in this repository.
+Start with the [recorder setup guide](docs/recorder.md), then [configure the analyzer and provision its models](docs/analyzer.md) and [open the web dashboard](docs/web.md). Service implementations live under `services/`; `compose.yaml`, `deploy/`, and `docs/` support the complete stack in this repository.
 
 - [`services/recorder/`](services/recorder/) — continuous USB audio capture.
 - [`services/analyzer/`](services/analyzer/) — offline inference, SQLite encounters, and retained clips.
+- [`services/web/`](services/web/) — offline dashboard, clip playback, spectrograms, and encounter review.
 - [`compose.yaml`](compose.yaml) and [`.env.example`](.env.example) — shared deployment configuration.
 - [`deploy/systemd/`](deploy/systemd/) — host startup integration.
 
@@ -76,7 +77,7 @@ The initial deployment will use a location around Ottawa and the recording date 
 
 Counts will be labeled **detections** or **encounters**, rather than bird counts: a single bird can generate many recordings.
 
-## Planned dashboard
+## Web dashboard
 
 - Species detected today, with first and last detection times.
 - A detection timeline and hourly activity chart.
@@ -106,7 +107,7 @@ A hard disk-space limit will take precedence over the normal audio retention win
 
 ## Deployment considerations
 
-The planned deployment uses Podman Compose with a systemd service to start the stack after reboot. The recorder Compose service, Containerfile, and systemd example are included; see the [recorder guide](docs/recorder.md) for build and startup commands. The analyzer joins the same stack with offline operation and read-only raw/model mounts; the web service will follow.
+The planned deployment uses Podman Compose with a systemd service to start the stack after reboot. The recorder Compose service, Containerfile, and systemd example are included; see the [recorder guide](docs/recorder.md) for build and startup commands. The analyzer joins the same stack with offline operation and read-only raw/model mounts; the web service joins it with read-only clips/status, shared SQLite access for reviews, and its own spectrogram cache. See the [web guide](docs/web.md) for local/LAN access and complete-stack operations.
 
 The recorder mounts `/dev/snd` for access to the audio devices, including replacement nodes after USB reconnect. For rootless Podman, supplementary audio-group access may require `keep-groups` with the `crun` runtime. Device mappings and permissions must be tested on the target host; see the [Podman run documentation](https://docs.podman.io/en/latest/markdown/podman-run.1.html).
 

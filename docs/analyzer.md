@@ -101,9 +101,9 @@ New encounters default to `review_status='unreviewed'`. Other allowed values are
 podman compose exec analyzer birdlog-analyzer health
 podman compose exec analyzer cat /status/analyzer/status.json
 podman compose logs --since 10m analyzer
-podman compose stop analyzer
+podman compose stop analyzer web
 podman compose run --rm analyzer once
-podman compose up -d analyzer
+podman compose up -d analyzer web
 ```
 
 Do not run `once` concurrently with `run`: an advisory lock on the database directory permits only one analyzer writer. The recorder can continue while either command runs.
@@ -112,10 +112,10 @@ Status JSON (`schema_version: 1`) includes model readiness/identity, last scan a
 
 Logs are structured JSON for application events. BirdNET/LiteRT may also emit native diagnostic lines. Configure host log rotation and monitor metadata growth separately from the clip budget. The library’s inference session uses one worker/producer and a bounded shared-memory buffer; the Compose service provides 256 MiB `/dev/shm` and a 512 MiB temporary filesystem. Library session logging is limited to warnings/errors, and temporary storage cannot grow onto the host disk without a bound. Native logs and model setup also use that temporary filesystem.
 
-For a consistent database-and-clips backup, stop only the analyzer (and future web review writes), then back up SQLite through its backup API:
+For a consistent database-and-clips backup, stop the analyzer and web service, then back up SQLite through its backup API:
 
 ```sh
-podman compose stop analyzer
+podman compose stop analyzer web
 podman compose run --rm analyzer backup /data/db/backup.sqlite3
 ```
 
