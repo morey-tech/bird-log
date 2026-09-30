@@ -126,9 +126,17 @@ The recorder mounts `/dev/snd` for access to the audio devices, including replac
 
 Species classification is the practical first version. Recognizing the same individual bird returning requires separate validation; similar-sounding recordings alone do not establish identity.
 
-A later experiment could retain selected high-quality clips and audio embeddings, start with one common species, compare similar call types, and validate results against independently recognizable birds across different days. Until validated, results will be labeled **call clusters**, not named individuals.
+**Northern Cardinals (*Cardinalis cardinalis*) are the preferred initial test case** for individual-recognition experiments because they are regularly present around the deployment location. Bird Log's detection and analysis remain open to all supported species; this experimental focus does not introduce a cardinal-only filter.
 
-For background, see this [research on individual bird recognition](https://arxiv.org/abs/1603.07236).
+A later experiment could retain selected high-quality cardinal clips and audio embeddings, compare similar call and song types, and validate results against independently recognizable birds across different days. Until validated, results will be labeled **call clusters**, not named individuals.
+
+Research to inform the experiment:
+
+- Ritchison (1988), [Song repertoires and the singing behavior of male Northern Cardinals](https://www.researchgate.net/publication/259439027_Song_repertoires_and_the_singing_behavior_of_male_Northern_Cardinals). Background on cardinal song repertoires and behavioral context, useful when choosing comparable vocalizations for the test dataset.
+- Gallego, Martinez-Vargas, and López (2026), [Individual bird identification by modelling temporal structure in bioacoustic embeddings](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210x.70399). Evaluates sequences of BirdNET embeddings with a lightweight recurrent model, informing experiments that preserve information across multiple song windows.
+- Merino Recalde (2023), [pykanto: A python library to accelerate research on wild bird song](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14155). Tools for organizing, segmenting, exploring, and labeling vocal repertoires, with an individual-identification example using great tits.
+
+These papers provide biological context and candidate methods; individual recognition still needs validation on the local cardinal recordings. For additional background, see this [research on individual bird recognition](https://arxiv.org/abs/1603.07236).
 
 ## License
 
