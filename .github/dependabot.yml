@@ -28,6 +28,11 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: build
+    # Python upgrades require coordinated runtime pins, ARM64 validation, and CI changes.
+    # Keep patch updates eligible within the tested Python 3.11 series.
+    ignore:
+      - dependency-name: python
+        versions: [">=3.12"]
     groups:
       container-images:
         patterns: ["*"]
