@@ -7,11 +7,11 @@ name = "birdlog-analyzer"
 version = "0.1.0"
 description = "Offline BirdNET analysis and encounter storage for Bird Log"
 requires-python = ">=3.11"
-dependencies = ["numpy==2.2.6", "soundfile==0.13.1"]
+dependencies = ["numpy==2.4.6", "soundfile==0.14.0"]
 
 [project.optional-dependencies]
 test = ["pytest==9.1.1"]
-ml = ["birdnet==1.1.1", "ai-edge-litert==2.0.3"]
+ml = ["birdnet==1.1.1", "ai-edge-litert==2.2.0"]
 
 [project.scripts]
 birdlog-analyzer = "birdlog_analyzer.__main__:main"
