@@ -7,11 +7,11 @@ name = "birdlog-web"
 version = "0.1.0"
 description = "Offline Bird Log dashboard and encounter review"
 requires-python = ">=3.11"
-dependencies = ["fastapi==0.142.1", "starlette==1.7.0", "uvicorn==0.54.0", "jinja2==3.1.6", "numpy==2.4.6", "matplotlib==3.11.2"]
+dependencies = ["fastapi==0.143.2", "starlette==1.8.0", "uvicorn==0.54.0", "jinja2==3.1.6", "numpy==2.4.6", "matplotlib==3.11.2"]
 
 [project.optional-dependencies]
 test = ["pytest==9.1.1", "httpx==0.28.1"]
-browser = ["playwright==1.63.0"]
+browser = ["playwright==1.64.0"]
 
 [project.scripts]
 birdlog-web = "birdlog_web.__main__:main"
